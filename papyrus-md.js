@@ -32,7 +32,7 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 		       req, 
 		       callback) {
 
-	    req([resourceName], function(md) {
+	    req(['text!'+resourceName], function(md) {
 		var tree = markdown.parse(md);
 		var res = interpret(tree);
 		console.log(res);

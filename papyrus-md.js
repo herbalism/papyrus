@@ -7,7 +7,10 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 	em: f.em,
 	header: function(arg) {
 	    return f['h'+arg.level].apply(this,_.rest(_.toArray(arguments)));
-	}
+	},
+	bulletlist: f.ul,
+	numberlist: f.ol,
+	listitem: f.li
     }
 
     interpret = function(next) {

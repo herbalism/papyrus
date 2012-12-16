@@ -1,0 +1,22 @@
+{
+  "name": "papyrus",
+  "version": "0.0.0",
+  "description": "Create foliage trees from markdown",
+  "main": "loaderconf.js",
+  "scripts": {
+    "test": "buster test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:herbalism/papyrus.git"
+  },
+  "keywords": [
+    "markdown",
+    "foliage"
+  ],
+  "author": "Joakim Ohlrogge",
+  "license": "BSD",
+  "devDependencies": {
+        "buster-amd": "*"
+  }
+}

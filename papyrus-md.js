@@ -15,13 +15,14 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
     }
 
     interpret = function(next) {
-	console.log("interpret: ", next);
 	if(_.isArray(next)) {
 	    var name = _.first(next);
+	    var handler = elemHandlers[name];
+	    if(!handler) {
+		throw Error("No handler for: "+name);
+	    }
 	    var rest = _.rest(next);
-	    console.log("name: ", name, "rest: ", rest);
-	    var result = elemHandlers[name].apply(this, _.map(rest, interpret));
-	    console.log("result: ", result);
+	    var result = handler.apply(this, _.map(rest, interpret));
 	    return result;
 	}
 	return next
@@ -36,7 +37,7 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 	    req(['text!'+resourceName], function(md) {
 		var tree = markdown.parse(md);
 		var res = interpret(tree);
-		console.log(res);
+		res.AST = tree;
 		callback(res);
 	    })
 	}

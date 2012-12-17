@@ -20,7 +20,19 @@ define(['jquery', 'when', 'papyrus-md'],
 	       }
 	   }
 
+	   var AST = function(leafs) {
+	       return leafs.AST;
+	   }
+
 	   buster.testCase("papyrus", {
+	       "parsed AST is accessible" : function() {
+		   return when(interpret("hello world")).
+		       then(AST).
+		       then(function(ast) {
+			   assert.equals(ast, ['markdown', ['para', 'hello world']]);
+		       })
+	       },
+
 	       "interpret paragraph" : function() {
 		   var context = $('<div />');
 		   return when(interpret("hello world")).
@@ -53,7 +65,6 @@ define(['jquery', 'when', 'papyrus-md'],
 		   )).
 		       then(applyTo(context)).
 		       then(function(value) {
-			   console.log(context);
 			   assert.equals($('h1', context).text().trim(), "Headline");
 		       })
 	       },
@@ -65,7 +76,6 @@ define(['jquery', 'when', 'papyrus-md'],
 		   )).
 		       then(applyTo(context)).
 		       then(function(value) {
-			   console.log(context);
 			   assert.equals($('h2', context).text().trim(), "Section");
 		       })
 	       },
@@ -76,7 +86,6 @@ define(['jquery', 'when', 'papyrus-md'],
 		   )).
 		       then(applyTo(context)).
 		       then(function(value) {
-			   console.log(context);
 			   assert.equals($('h1', context).text().trim(), "Headline 1");
 		       })
 	       },
@@ -87,7 +96,6 @@ define(['jquery', 'when', 'papyrus-md'],
 		   )).
 		       then(applyTo(context)).
 		       then(function(value) {
-			   console.log(context);
 			   assert.equals($('h2', context).text().trim(), "Headline 2");
 		       })
 	       },
@@ -98,7 +106,6 @@ define(['jquery', 'when', 'papyrus-md'],
 		   )).
 		       then(applyTo(context)).
 		       then(function(value) {
-			   console.log(context);
 			   assert.equals($('h6', context).text().trim(), "Headline 6");
 		       })
 	       },
@@ -110,7 +117,6 @@ define(['jquery', 'when', 'papyrus-md'],
 		   )).
 		       then(applyTo(context)).
 		       then(function(value) {
-			   console.log(context);
 			   assert.equals($('ul li', context).text().trim(), "item1\nitem2");
 		       })
 	       },
@@ -122,7 +128,6 @@ define(['jquery', 'when', 'papyrus-md'],
 		   )).
 		       then(applyTo(context)).
 		       then(function(value) {
-			   console.log(context);
 			   assert.equals($('ol li', context).text().trim(), "item1\nitem2");
 		       })
 	       },
@@ -134,7 +139,6 @@ define(['jquery', 'when', 'papyrus-md'],
 		   )).
 		       then(applyTo(context)).
 		       then(function(value) {
-			   console.log(context);
 			   assert.equals($('pre', context).text().trim(), "javascript\nvar a = function(){return '';}");
 		       })
 	       }

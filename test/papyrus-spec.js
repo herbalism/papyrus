@@ -125,7 +125,18 @@ define(['jquery', 'when', 'papyrus-md'],
 			   console.log(context);
 			   assert.equals($('ol li', context).text().trim(), "item1\nitem2");
 		       })
+	       },
+	       "interpret codeblock" : function() {
+		   var context = $('<div />');
+		   return when(interpret(
+		       "```javascript\n"+
+		       "var a = function(){return '';}```\n"
+		   )).
+		       then(applyTo(context)).
+		       then(function(value) {
+			   console.log(context);
+			   assert.equals($('pre', context).text().trim(), "javascript\nvar a = function(){return '';}");
+		       })
 	       }
-
 	   })
        })

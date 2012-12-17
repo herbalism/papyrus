@@ -10,7 +10,8 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 	},
 	bulletlist: f.ul,
 	numberlist: f.ol,
-	listitem: f.li
+	listitem: f.li,
+	inlinecode: f.pre
     }
 
     interpret = function(next) {

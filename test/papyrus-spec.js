@@ -24,22 +24,45 @@ define(['jquery', 'when', 'papyrus-md'],
 	       return leafs.AST;
 	   }
 
+	   var toFoliage = function(leafs, ast) {
+	       return leafs.toFoliage(ast);
+	   }
+	   
+	   var identity = function(value) { return value };
+
+	   var pick = function() {
+	       var defered = arguments;
+	       return function(val) {
+		   return _.map(defered, function(arg){return arg(val);});
+	       }
+	   }
+
 	   buster.testCase("papyrus", {
 	       "parsed AST is accessible" : function() {
 		   return when(interpret("hello world")).
 		       then(AST).
 		       then(function(ast) {
 			   assert.equals(ast, ['markdown', ['para', 'hello world']]);
-		       })
+		       });
 	       },
-
+	       "possible to explicitly interpret AST": function() {
+		   var context = $('<div />');
+		   return when(interpret("stuff")).
+		       then(pick(identity, AST)).
+		       spread(toFoliage).
+		       then(applyTo(context)).
+		       then(function(value) {
+			   assert.equals($('p', context).text().trim(), "stuff");
+		       });
+		    
+	       },
 	       "interpret paragraph" : function() {
 		   var context = $('<div />');
 		   return when(interpret("hello world")).
 		       then(applyTo(context)).
 		       then(function(value) {
 			   assert.equals($('p', context).text().trim(), "hello world");
-		       })
+		       });
 	       },
        	       "interpret paragraph with strong" : function() {
 		   var context = $('<div />');

@@ -38,6 +38,7 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 		var tree = markdown.parse(md);
 		var res = interpret(tree);
 		res.AST = tree;
+		res.toFoliage = interpret;
 		callback(res);
 	    })
 	}

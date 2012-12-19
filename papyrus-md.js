@@ -11,7 +11,8 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 	bulletlist: f.ul,
 	numberlist: f.ol,
 	listitem: f.li,
-	inlinecode: f.pre
+	inlinecode: f.pre,
+	link: f.a
     }
 
     interpret = function(next) {
@@ -19,6 +20,7 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 	    var name = _.first(next);
 	    var handler = elemHandlers[name];
 	    if(!handler) {
+		console.log(next);
 		throw Error("No handler for: "+name);
 	    }
 	    var rest = _.rest(next);

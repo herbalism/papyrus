@@ -164,6 +164,16 @@ define(['jquery', 'when', 'papyrus-md'],
 		       then(function(value) {
 			   assert.equals($('pre', context).text().trim(), "javascript\nvar a = function(){return '';}");
 		       })
+	       },
+	       "interpret link" : function() {
+		   var context = $('<div />');
+		   return when(interpret('[name](http://target.se)')).
+		       then(applyTo(context)).
+		       then(function(value) {
+			   var link = $('a', context);
+			   assert.equals(link.text().trim(), 'name');
+			   assert.equals(link.attr('href'), 'http://target.se');
+		       });
 	       }
 	   })
        })

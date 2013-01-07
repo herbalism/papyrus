@@ -15,7 +15,8 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 	link: f.a,
 	img: function(elem) {
 	    var attr = {alt: elem.alt, src: elem.href};
-	    return f.img(attr)}
+	    return f.img(attr)},
+	blockquote:f.blockquote
     }
 
     interpret = function(next) {

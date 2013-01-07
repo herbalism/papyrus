@@ -165,6 +165,17 @@ define(['jquery', 'when', 'papyrus-md'],
 			   assert.equals($('pre', context).text().trim(), "javascript\nvar a = function(){return '';}");
 		       })
 	       },
+	       "interpret block quote" : function() {
+		   var context = $('<div />');
+		   return when(interpret(
+		       "> row 1\n"+
+		       "> row 2"
+		   )).
+		       then(applyTo(context)).
+		       then(function(value) {
+			   assert.equals($('blockquote p', context).text().trim(), "row 1\nrow 2");
+		       })
+	       },
 	       "interpret link" : function() {
 		   var context = $('<div />');
 		   return when(interpret('[name](http://target.se)')).

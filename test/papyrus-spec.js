@@ -174,6 +174,16 @@ define(['jquery', 'when', 'papyrus-md'],
 			   assert.equals(link.text().trim(), 'name');
 			   assert.equals(link.attr('href'), 'http://target.se');
 		       });
+	       },
+	       "interpret image" : function() {
+		   var context = $('<div />');
+		   return when(interpret('![alt text](images/image.png)')).
+		       then(applyTo(context)).
+		       then(function(value) {
+			   var link = $('img', context);
+			   assert.equals(link.attr('alt'), 'alt text');
+			   assert.equals(link.attr('src'), 'images/image.png');
+		       });
 	       }
 	   })
        })

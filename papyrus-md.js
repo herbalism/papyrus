@@ -12,7 +12,10 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 	numberlist: f.ol,
 	listitem: f.li,
 	inlinecode: f.pre,
-	link: f.a
+	link: f.a,
+	img: function(elem) {
+	    var attr = {alt: elem.alt, src: elem.href};
+	    return f.img(attr)}
     }
 
     interpret = function(next) {

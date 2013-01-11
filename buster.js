@@ -4,6 +4,7 @@ config["browser tests"] = {
     environment: "browser",
     sources: ["papyrus*.js",
 	      "modules/foliage/foliage.js",
+	      "modules/phloem/phloem.js",
 	      "modules/markdown-js/lib/markdown.js",
 	      "modules/lodash/lodash.js",
 	      "modules/when/**/*.js",

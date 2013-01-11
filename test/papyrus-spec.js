@@ -1,5 +1,5 @@
-define(['jquery', 'when', 'papyrus-md'],
-       function($, when, papyrus) {
+define(['jquery', 'when', 'papyrus-md', 'phloem'],
+       function($, when, papyrus, phloem) {
 	   var assert = buster.assert;
 	   var interpret = function(md) {
 	       var defered = when.defer();
@@ -26,6 +26,12 @@ define(['jquery', 'when', 'papyrus-md'],
 
 	   var toFoliage = function(leafs, ast) {
 	       return leafs.toFoliage(ast);
+	   }
+
+	   var toSplit = function(fn) {
+	       return  function(leafs, ast) {
+		   return leafs.split(ast, fn);
+	       }
 	   }
 	   
 	   var identity = function(value) { return value };
@@ -55,6 +61,34 @@ define(['jquery', 'when', 'papyrus-md'],
 			   assert.equals($('p', context).text().trim(), "stuff");
 		       });
 		    
+	       },
+	       "possible to split AST on function": function() {
+		   var context = $('<div />');
+		   return when(interpret("headline\n"+
+					 "========\n"+
+					 "text1\n"+
+					 "\n"+
+					 "headline2\n"+
+					 "========\n"+
+					 "text2\n")).
+		       then(pick(identity, AST)).
+		       spread(toSplit(function(elem) {
+			   console.log("elem: ", elem);
+			   return false;
+		       })).
+		       then(function(value) {
+			   assert.equals(value.value, ['markdown', ['header', {level: 1}, 'headline'], ['para', 'text1']])
+			   return value;
+		       }).
+		       then(phloem.next).
+		       then(function(value) {
+			   assert.equals(value.value, ['markdown', ['header', {level: 1}, 'headline2'], ['para', 'text2']])
+			   return value;
+		       }).
+		       then(phloem.next).
+		       then(function(value) {
+			   assert.equals(value, phloem.EOF);
+		       });
 	       },
 	       "interpret paragraph" : function() {
 		   var context = $('<div />');

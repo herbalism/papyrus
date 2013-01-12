@@ -38,7 +38,7 @@ define(['foliage', 'lodash', 'when', 'phloem',  'js!markdown'], function(f, _, w
 	function find(ast, fn) {
 	    var foundAt;
 	    var found = _.find(ast, function(element, index)  {
-		foundAt = _.isArray(element) && element.length > 2 && element[0] === 'header' && index;
+		foundAt = fn(element) && index;
 		return foundAt;
 	    });
 	    return foundAt;

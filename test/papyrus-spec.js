@@ -72,9 +72,8 @@ define(['jquery', 'when', 'papyrus-md', 'phloem'],
 					 "========\n"+
 					 "text2\n")).
 		       then(pick(identity, AST)).
-		       spread(toSplit(function(elem) {
-			   console.log("elem: ", elem);
-			   return false;
+		       spread(toSplit(function(element) {
+			   return _.isArray(element) && element.length > 2 && element[0] === 'header'
 		       })).
 		       then(function(value) {
 			   assert.equals(value.value, ['markdown', ['header', {level: 1}, 'headline'], ['para', 'text1']])

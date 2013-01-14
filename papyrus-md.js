@@ -19,16 +19,18 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 	blockquote:f.blockquote
     }
 
-    interpret = function(next) {
+    interpret = function(next, handlers) {
 	if(_.isArray(next)) {
 	    var name = _.first(next);
-	    var handler = elemHandlers[name];
+	    var handlers = handlers;
+	    var handler = handlers[name];
 	    if(!handler) {
 		console.log(next);
 		throw Error("No handler for: "+name);
 	    }
 	    var rest = _.rest(next);
-	    var result = handler.apply(this, _.map(rest, interpret));
+	    var result = handler.apply(this, _.map(rest, 
+						   function(elem) {return interpret(elem, handlers)}));
 	    return result;
 	}
 	return next
@@ -38,13 +40,15 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
     return {
 	load: function(resourceName, 
 		       req, 
-		       callback) {
+		       callback,
+		       config) {
 
 	    req(['text!'+resourceName], function(md) {
 		var tree = markdown.parse(md);
-		var res = interpret(tree);
+		var configuredHandlers = _.extend({}, elemHandlers, config); 
+		var res = interpret(tree, configuredHandlers);
 		res.AST = tree;
-		res.toFoliage = interpret;
+		res.toFoliage = function(elem) {return interpret(elem, configuredHandlers)};
 		callback(res);
 	    })
 	}

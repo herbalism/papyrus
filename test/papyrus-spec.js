@@ -1,7 +1,7 @@
-define(['jquery', 'when', 'papyrus-md'],
-       function($, when, papyrus) {
+define(['jquery', 'when', 'papyrus-md', 'foliage'],
+       function($, when, papyrus, f) {
 	   var assert = buster.assert;
-	   var interpret = function(md) {
+	   var interpret = function(md, conf) {
 	       var defered = when.defer();
 	       var fakeRequire = function(resources, callback) {
 		   callback(md);
@@ -9,7 +9,8 @@ define(['jquery', 'when', 'papyrus-md'],
 	      
 	       papyrus.load('the-markdown.md',
 			    fakeRequire,
-			    defered.resolve);
+			    defered.resolve,
+			    conf || {});
 
 	       return defered.promise;
 	   }
@@ -195,6 +196,18 @@ define(['jquery', 'when', 'papyrus-md'],
 			   assert.equals(link.attr('alt'), 'alt text');
 			   assert.equals(link.attr('src'), 'images/image.png');
 		       });
+	       },
+	       "uses handler from conf if available" : function () {
+		   var context = $('<div />');
+		   return when(interpret('[link text](linkUrl)', 
+					{link: function(element) {
+					    return f.p({id: "subst"}, element.href);
+					}})).
+		       then(applyTo(context)).
+		       then(function(value) {
+			   var link = $('p#subst', context);
+			   assert.equals(link.text().trim(), 'linkUrl');
+		       })
 	       }
 	   })
        })

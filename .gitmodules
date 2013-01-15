@@ -13,3 +13,6 @@
 [submodule "modules/when"]
 	path = modules/when
 	url = git@github.com:cujojs/when.git
+[submodule "modules/phloem"]
+	path = modules/phloem
+	url = git@github.com:herbalism/phloem.git

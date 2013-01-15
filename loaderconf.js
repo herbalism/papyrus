@@ -19,6 +19,10 @@ curl({
 	foliage: {
 	    path: 'modules/foliage',
 	    main: 'foliage'
+	},
+	phloem: {
+	    path: 'modules/phloem',
+	    main: 'phloem'
 	}
     }
     

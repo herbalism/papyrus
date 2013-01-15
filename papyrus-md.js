@@ -1,4 +1,4 @@
-define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
+define(['foliage', 'lodash', 'when', 'phloem',  'js!markdown'], function(f, _, when, phloem) {
     var interpret;
     var elemHandlers = {
 	markdown: f.all,
@@ -37,6 +37,29 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 	return next
     };
 
+    var splitAST = function(ast, fn) {
+	function find(ast, fn) {
+	    var foundAt;
+	    var found = _.find(ast, function(element, index)  {
+		foundAt = fn(element) && index;
+		return foundAt;
+	    });
+	    return foundAt;
+	}
+
+	var foundAt = find(ast, fn);
+	if(foundAt) {
+	    var rest = _.drop(ast, foundAt +1 )
+	    var stop = find(rest, fn);
+	    var res = stop ? [ast[foundAt]].concat(_.take(rest, stop)) : _.drop(ast, foundAt);
+	    var next = stop ? _.drop(rest, stop) : rest;
+	    return {value: ['markdown'].concat(res), 
+		    next: stop ? when(splitAST(['markdown'].concat(next), fn)) : phloem.EOF
+		   };
+	}
+
+	return {value: ast};
+    };
 
     return {
 	load: function(resourceName, 
@@ -50,6 +73,7 @@ define(['foliage', 'lodash', 'js!markdown'], function(f, _) {
 		var res = interpret(tree, configuredHandlers);
 		res.AST = tree;
 		res.toFoliage = function(elem) {return interpret(elem, configuredHandlers)};
+		res.split = splitAST;
 		callback(res);
 	    })
 	}

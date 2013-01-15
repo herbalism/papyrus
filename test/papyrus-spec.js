@@ -177,15 +177,27 @@ define(['jquery', 'when', 'papyrus-md', 'foliage'],
 			   assert.equals($('blockquote p', context).text().trim(), "row 1\nrow 2");
 		       })
 	       },
-	       "interpret link" : function() {
+	       "interpret block quote" : function() {
 		   var context = $('<div />');
-		   return when(interpret('[name](http://target.se)')).
+		   return when(interpret(
+		       "> row 1\n"+
+		       "> row 2"
+		   )).
 		       then(applyTo(context)).
 		       then(function(value) {
-			   var link = $('a', context);
-			   assert.equals(link.text().trim(), 'name');
-			   assert.equals(link.attr('href'), 'http://target.se');
-		       });
+			   assert.equals($('blockquote p', context).text().trim(), "row 1\nrow 2");
+		       })
+	       },
+	       "interpret codeblock" : function() {
+		   var context = $('<div />');
+		   return when(interpret(
+		       "    row 1\n"+
+		       "    row 2"
+		   )).
+		       then(applyTo(context)).
+		       then(function(value) {
+			   assert.equals($('code', context).text().trim(), "row 1\nrow 2");
+		       })
 	       },
 	       "interpret image" : function() {
 		   var context = $('<div />');
